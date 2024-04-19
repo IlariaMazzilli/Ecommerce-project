@@ -1,20 +1,41 @@
-import { BrowserRouter, Routes, Route, createBrowserRouter } from "react-router-dom";
-import { Homepage } from "../pages/Homepage";
-import { Dashboard } from "../pages/Dashboard";
-import { Login } from "../pages/Login";
+import { createBrowserRouter, redirect } from "react-router-dom";
+import  Dashboard  from "../pages/Dashboard";
+import  Login  from "../pages/Login";
+import SingleProduct from "../pages/SingleProduct";
+import App from "../App.jsx";
+import Register from "../pages/Register.jsx";
 
-export const Router = createBrowserRouter([
-    
-    {
-        path: "/",
-        element: <Homepage />,
-    },
-    {
-        path: "dashboard",
-        element: <Dashboard />,
-    },
-    {
-        path: "login",
-        element: <Login />,
-    },
+// function redirectUserIfNotLogged() {
+//   return redirect("/");
+// }
+
+function redirectIfUserLogged(){
+    return redirect("/dashboard")
+}
+ 
+
+export const Router = createBrowserRouter([ 
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+    // loader: redirectUserIfNotLogged,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "registrati",
+    element: <Register/>,
+    loader: redirectIfUserLogged,
+  },
+
+  {
+    path: "products/:product",
+    element: <SingleProduct />,
+  },
 ]);
