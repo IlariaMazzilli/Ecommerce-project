@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import Menu from '../components/Menu'
+import {Footer} from '../components/Footer'
 
 function SingleProduct() {
   const [singleProduct, setSingleProduct] = useState([]);
-  const { product } = useParams();
+  const { productID } = useParams();
 
   async function fetchData() {
     try {
       const response = await fetch(
-        `https://fakestoreapi.com/products/${product}`
+        `https://fakestoreapi.com/products/${productID}`
       );
       const json = await response.json();
       setSingleProduct(json);
@@ -19,14 +21,15 @@ function SingleProduct() {
 
   useEffect(() => {
     fetchData();
-  }, [product]);
+  }, [productID]);
 
   return (
     <div>
+      <Menu/>
       <div className="bg-white h-screen">
         <div className="pt-6">
-          <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-            <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+          <div className="mx-auto mt-6 max-w-2xl sm:px-6 flex justify-center h-96">
+            <div className="aspect-h-4 aspect-w-3 overflow-hidden rounded-lg lg:block ">
               <img src={singleProduct.image} alt={singleProduct.title} />
             </div>
           </div>
@@ -391,22 +394,13 @@ function SingleProduct() {
                 </div>
               </div>
 
-              <div className="mt-10">
-                <h2 className="text-sm font-medium text-gray-900">Details</h2>
-
-                <div className="mt-4 space-y-6">
-                  <p className="text-sm text-gray-600">
-                    The 6-Pack includes two black, two white, and two heather
-                    gray Basic Tees. Sign up for our subscription service and be
-                    the first to get new, exciting colors, like our upcoming
-                    &quot;Charcoal Gray&quot; limited release.
-                  </p>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>
       </div>
+      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+      <Footer/>
     </div>
   );
 }

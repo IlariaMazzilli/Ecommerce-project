@@ -6,12 +6,14 @@ import "../index.css";
 
 export function Homepage() {
   const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   async function fetchStore() {
     try {
       const response = await fetch("https://fakestoreapi.com/products");
       const json = await response.json();
       setProducts(json);
+      console.log(json)
     } catch (error) {
       console.error(error);
     }
@@ -20,6 +22,11 @@ export function Homepage() {
   useEffect(() => {
     fetchStore();
   }, []);
+
+    // Funzione per filtrare i prodotti per categoria
+    const filteredProducts = selectedCategory
+    ? products.filter(product => product.category === selectedCategory)
+    : products;
 
   return (
     <>
@@ -58,8 +65,8 @@ export function Homepage() {
 
           <ul className="space-y-1 border-t border-gray-200 p-4">
             <li>
-              <label htmlFor="FilterInStock" className="inline-flex items-center gap-2">
-                <input type="checkbox" id="FilterInStock" className="size-5 rounded border-gray-300" />
+              <label htmlFor="Men's Clothing" className="inline-flex items-center gap-2">
+                <input type="checkbox" id="Men's Clothing" className="size-5 rounded border-gray-300" onChange={() => setSelectedCategory(`men's clothing`)}/>
 
                 <span className="text-sm font-medium text-gray-700"> Men's clothing </span>
               </label>
@@ -67,7 +74,7 @@ export function Homepage() {
 
             <li>
               <label htmlFor="FilterPreOrder" className="inline-flex items-center gap-2">
-                <input type="checkbox" id="FilterPreOrder" className="size-5 rounded border-gray-300" />
+                <input type="checkbox" id="FilterPreOrder" className="size-5 rounded border-gray-300" onChange={() => setSelectedCategory(`women's clothing`)}/>
 
                 <span className="text-sm font-medium text-gray-700"> Women's clothing </span>
               </label>
@@ -79,6 +86,7 @@ export function Homepage() {
                   type="checkbox"
                   id="FilterOutOfStock"
                   className="size-5 rounded border-gray-300"
+                  onChange={() => setSelectedCategory(`jewelery`)}
                 />
 
                 <span className="text-sm font-medium text-gray-700"> Jewelery </span>
@@ -91,6 +99,7 @@ export function Homepage() {
                   type="checkbox"
                   id="FilterOutOfStock"
                   className="size-5 rounded border-gray-300"
+                  onChange={() => setSelectedCategory(`electronics`)}
                 />
 
                 <span className="text-sm font-medium text-gray-700"> Electronics </span>
@@ -170,24 +179,23 @@ export function Homepage() {
             Customers also purchased
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-            {products.map((product) => (
-              <div className="bg-white rounded-2xl p-4 place-content-around h-full">
-                <a href="#" className="group block">
+            {filteredProducts.map((product) => (
+              <div className="bg-white rounded-2xl p-4 h-fit" key={product.id}>
+                <a href="#" className="group block h-43">
                   <img
                     src={product.image}
                     alt={product.title}
-                    className="object-fit "
+                    className="h-60 "
                   />
 
                   <div className="mt-3 flex justify-between text-sm">
                     <div>
-                      <h3 className="text-gray-900 group-hover:underline group-hover:underline-offset-4 font-bold">
+                      <h3 className="text-gray-900 group-hover:underline group-hover:underline-offset-4 font-bold h-5 overflow-hidden">
                         {product.title}
                       </h3>
 
-                      <p className="mt-1.5 text-pretty text-xs text-gray-500">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi nobis, quia soluta quisquam
-                        voluptatem nemo.
+                      <p className="text-pretty text-xs text-gray-500 h-20 w-full overflow-hidden overflow-ellipsis">
+                        {product.description}
                       </p>
                     </div>
 
@@ -195,12 +203,13 @@ export function Homepage() {
 
                   </div>
                 </a>
+                <Link to={`/products/${product.id}`}>
                 <a
-                  className="inline-block rounded my-6 bg-indigo-600 px-8 py-3 text-sm font-medium text-white transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring active:bg-indigo-500"
-                  href="#"
+                  className="flex justify-center w-full rounded my-6 bg-indigo-600 px-8 py-3 text-sm font-medium text-white transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring active:bg-indigo-500"
                 >
                   View Article
                 </a>
+                </Link>
               </div>
             ))}
           </div>
@@ -354,9 +363,7 @@ export function Homepage() {
         </div>
 
         <p className="mt-4 text-gray-700">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa sit rerum incidunt, a
-          consequuntur recusandae ab saepe illo est quia obcaecati neque quibusdam eius accusamus
-          error officiis atque voluptates magnam!
+         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Obcaecati totam quaerat facere et eos aperiam molestiae inventore possimus, accusamus mollitia ullam placeat? Est et labore, minima pariatur praesentium fugit voluptates!
         </p>
       </blockquote>
 
