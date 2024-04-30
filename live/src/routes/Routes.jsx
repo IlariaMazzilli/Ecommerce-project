@@ -5,12 +5,21 @@ import SingleProduct from "../pages/SingleProduct";
 import App from "../App.jsx";
 import Register from "../pages/Register.jsx";
 
-// function redirectUserIfNotLogged() {
-//   return redirect("/");
-// }
+function redirectUserIfNotLogged() {
+  if (!localStorage.getItem("Utente")){
+  return redirect("/");
+  } else  {
+    return null
+  }
+}
 
 function redirectIfUserLogged(){
-    return redirect("/dashboard")
+  if (localStorage.getItem("Utente")){
+    return redirect("/dashboard");
+    } else  {
+      return null
+    }
+   
 }
  
 
@@ -22,11 +31,12 @@ export const Router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
-    // loader: redirectUserIfNotLogged,
+     loader: redirectUserIfNotLogged,
   },
   {
     path: "/login",
     element: <Login />,
+    loader: redirectIfUserLogged
   },
   {
     path: "registrati",
