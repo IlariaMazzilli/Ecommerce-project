@@ -36,7 +36,7 @@ export const Router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
-    loader: redirectIfUserLogged
+    loader: redirectIfUserLogged,
   },
   {
     path: "registrati",

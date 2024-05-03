@@ -1,6 +1,14 @@
-import React from "react";
+import { useNavigate } from "react-router";
 
 function Menu() {
+  const navigate = useNavigate()
+  
+  function onLogOut() {
+    localStorage.removeItem('Utente');
+    localStorage.removeItem('Token');
+    navigate('/');
+  }
+
   return (
     <div>
       <header className="bg-white">
@@ -61,12 +69,22 @@ function Menu() {
             </a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a
-              href={"login"}
-              className="text-sm font-semibold leading-6 text-gray-900"
-            >
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>
+            {localStorage.getItem("Utente") && (
+              <button
+                onClick={onLogOut}
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Log Out
+              </button>
+            )}
+            {!localStorage.getItem("Utente") && (
+              <a
+                href="login"
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                Log in <span aria-hidden="true">&rarr;</span>
+              </a>
+            )}
           </div>
         </nav>
         <div className="lg:hidden" role="dialog" aria-modal="true">

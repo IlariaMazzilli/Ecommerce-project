@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const Login = () => {
   const [data, setData] = useState({
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   function handleChange(e) {
     setData((data) => {
@@ -17,40 +20,49 @@ const Login = () => {
     });
   }
 
+  function handleLogin(email, password) {
+    return new Promise((resolve, reject) => {
+      //Simuliamo il ritardo nell'interrogazione del server affinchè recuperi i dati dell'utente dal database:
+      setTimeout(() => {
+        if (email != "" && password != "") {
+          //simuliamo i dati ricevuti dal server:
+          const userData = {
+            firstname: "Emanuele",
+            lastname: "Avitabile",
+            ruolo: "Admin",
+            email: "emanuele@gmail.com",
+          };
 
-
-function handleLogin(username, password){
-  return new Promise((resolve, reject)=>{
-    setTimeout(()=>{
-      if(username != "" && password != ""){
-        const userData = {
-          username: "Emanuele",
-          ruolo: "Admin",
-          mail: "emanuele@gmail.com"
+          const token =
+            "LBJimGWT7oxHtJfVFez4dbKyL3eYcKTJh2FrpwlIAQtqYysLQHziFqEVz676IeoX";
+          //I dati dell'utente vengono restituiti dal metodo handleLogin:
+          resolve({
+            data: userData,
+            token: token,
+          });
+        } else {
+          reject(new Error("Credenziali non valide"));
         }
-
-        resolve(
-          userData
-        )
-      } else {
-        reject(new Error("Credenziali non valide"));
-      }
-      }, 2000)
-  })
-} 
- function handleSubmit(e) {
+      }, 2000);
+    });
+  }
+  function handleSubmit(e) {
     e.preventDefault();
     console.log(data);
-    handleLogin("emanuele@gmail.com", "loodeodj")
-    .then((response)=> {
-      console.log(response);
-      //Trasformo l'oggetto ricevuto in una stringa prima di salvarlo nel local storage.
-     const responseToString = JSON.stringify(response);
-      localStorage.setItem("Utente", responseToString)
-
-    }).catch((error)=> {
-      console.log(error);
-    })
+    //Al submit del form, chiamiamo il metodo handleLogin, il quale restituisce userData:
+    handleLogin(data.email, data.password)
+      .then((response) => {
+        console.log(response);
+        //Trasformiamo i dati utente ricevuti in una stringa prima di salvarlo nel local storage:
+        const responseToString = JSON.stringify(response.data);
+        localStorage.setItem("Utente", responseToString);
+        //Salviamo il token ricevuto nel local storage:
+        localStorage.setItem("Token", response.token);
+        navigate("/dashboard")
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -111,7 +123,7 @@ function handleLogin(username, password){
 
             <div className="relative">
               <input
-              name="password"
+                name="password"
                 value={data.password}
                 onChange={handleChange}
                 type="password"
