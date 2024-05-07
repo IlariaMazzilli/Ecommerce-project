@@ -1,13 +1,16 @@
 import { useNavigate } from "react-router";
 
 function Menu() {
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   function onLogOut() {
-    localStorage.removeItem('Utente');
-    localStorage.removeItem('Token');
-    navigate('/');
+    localStorage.removeItem("Utente");
+    localStorage.removeItem("Token");
+    navigate("/");
   }
+
+  const getUser = localStorage.getItem("Utente");
+  const userData = JSON.parse(getUser);
 
   return (
     <div>
@@ -67,6 +70,58 @@ function Menu() {
             >
               Registrati
             </a>
+            {/* Menu utente a tendina */}
+            {localStorage.getItem("Utente") && (
+              <div className="relative">
+                <div className="inline-flex items-center overflow-hidden rounded-md border bg-white">
+                  <a
+                    href="#"
+                    className="border-e px-4 py-2 text-sm/none text-gray-600 hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    {`Ciao ${userData.firstname}`}
+                  </a>
+
+                  <button className="h-full p-2 text-gray-600 hover:bg-gray-50 hover:text-gray-700">
+                    <span className="sr-only">Menu</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <div
+                  className="absolute end-0 z-10 mt-2 w-56 rounded-md border border-gray-100 bg-white shadow-lg"
+                  role="menu"
+                >
+                  <div className="p-2">
+                    <a
+                      href="#"
+                      className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                      role="menuitem"
+                    >
+                      Utenti
+                    </a>
+
+                    <a
+                      href="#"
+                      className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                      role="menuitem"
+                    >
+                      Il mio account
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             {localStorage.getItem("Utente") && (
@@ -87,6 +142,7 @@ function Menu() {
             )}
           </div>
         </nav>
+        {/* Menu mobile  */}
         <div className="lg:hidden" role="dialog" aria-modal="true">
           <div className="fixed inset-0 z-10"></div>
           <div className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">

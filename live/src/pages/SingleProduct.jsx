@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import Menu from '../components/Menu'
 
 function SingleProduct() {
   const [singleProduct, setSingleProduct] = useState([]);
@@ -22,6 +23,8 @@ function SingleProduct() {
   }, [product]);
 
   return (
+    <>
+    <Menu/>
     <div>
       <div className="bg-white h-screen">
         <div className="pt-6">
@@ -408,6 +411,7 @@ function SingleProduct() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

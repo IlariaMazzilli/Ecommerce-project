@@ -35,9 +35,10 @@ function Register() {
         ) {
           //simuliamo i dati ricevuti dal server:
           const userData = {
-            username: "Emanuele",
+            firstname: "Emanuele",
+            lastname: "Avitabile",
             ruolo: "Admin",
-            mail: "emanuele@gmail.com",
+            email: "emanuele@gmail.com",
           };
           const token =
             "LBJimGWT7oxHtJfVFez4dbKyL3eYcKTJh2FrpwlIAQtqYysLQHziFqEVz676IeoX";
