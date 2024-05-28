@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 function Register() {
   const [data, setData] = useState({
@@ -23,53 +24,64 @@ function Register() {
     });
   }
 
-  function handleRegister(payload) {
-    return new Promise((resolve, reject) => {
-      //Simuliamo il ritardo nell'interrogazione del server affinchè invii i dati dell'utente al database:
-      setTimeout(() => {
-        if (
-          payload.firstname != "" &&
-          payload.email != "" &&
-          payload.password != "" &&
-          payload.password === payload.passwordConfirmation
-        ) {
-          //simuliamo i dati ricevuti dal server:
-          const userData = {
-            firstname: "Emanuele",
-            lastname: "Avitabile",
-            ruolo: "Admin",
-            email: "emanuele@gmail.com",
-          };
-          const token =
-            "LBJimGWT7oxHtJfVFez4dbKyL3eYcKTJh2FrpwlIAQtqYysLQHziFqEVz676IeoX";
-          //I dati dell'utente vengono restituiti dal metodo handleLogin:
-          resolve({
-            data: userData,
-            token: token,
-          });
+  async function handleRegister(payload) {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/registrazione",
+        payload
+      );
 
-          resolve(userData);
-        } else {
-          reject(new Error("Credenziali non valide"));
-        }
-      }, 2000);
-    });
+      console.log(response.data);
+      localStorage.setItem("Utente", JSON.stringify(response.data.user));
+    } catch (error) {
+      console.error(
+        "Si è verificato un errore durante l'invio dei dati:",
+        error
+      );
+    }
+    // return new Promise((resolve, reject) => {
+    //Simuliamo il ritardo nell'interrogazione del server affinchè invii i dati dell'utente al database:
+    //   setTimeout(() => {
+    //       //simuliamo i dati ricevuti dal server:
+    //       const userData = {
+    //         firstname: "Emanuele",
+    //         lastname: "Avitabile",
+    //         ruolo: "Admin",
+    //         email: "emanuele@gmail.com",
+    //       };
+    //       const token =
+    //         "LBJimGWT7oxHtJfVFez4dbKyL3eYcKTJh2FrpwlIAQtqYysLQHziFqEVz676IeoX";
+    //       //I dati dell'utente vengono restituiti dal metodo handleLogin:
+    //       resolve({
+    //         data: userData,
+    //         token: token,
+    //       });
+
+    //       resolve(userData)
+    //   }, 2000);
+    // });
   }
+
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(data);
-    handleRegister(data)
-      .then((response) => {
-        //Trasformiamo i dati utente ricevuti in una stringa prima di salvarlo nel local storage:
-        const responseToString = JSON.stringify(response.data);
-        localStorage.setItem("Utente", responseToString);
-        //Salviamo il token ricevuto nel local storage:
-        localStorage.setItem("Token", response.token);
-        navigate("/dashboard");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (
+      data.firstname != "" &&
+      data.email != "" &&
+      data.password != "" &&
+      data.password === data.passwordConfirmation
+    ) {
+      const sendData = {
+        name: data.firstname,
+        last_name: data.lastname,
+        email: data.email,
+        password: data.password,
+      };
+      console.log(sendData);
+      handleRegister(sendData);
+      navigate("/");
+    } else {
+      alert("Compila tutti i dati richiesti!");
+    }
   }
 
   return (
